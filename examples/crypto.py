@@ -26,7 +26,9 @@ class TopNCPPAlphaModel(AlphaModel):
     def _highest_probability_assets(self, dt):
         assets = self.signals["cdf"].assets
         all_probabilities = {
-            asset: 1 - self.signals["cdf"](asset, self.lookback) for asset in assets if asset != "EQ:USDC-USD"
+            asset: 1 - self.signals["cdf"](asset, self.lookback)
+            for asset in assets
+            if asset != "EQ:USDC-USD"
         }
         return [
             asset
@@ -50,7 +52,9 @@ class TopNCPPAlphaModel(AlphaModel):
                 max_probability = max(all_probabilities)
                 sum_of_probabilities = sum(all_probabilities)
                 for asset in top_assets:
-                    weights[asset[0]] = (asset[1] / sum_of_probabilities) * max_probability
+                    weights[asset[0]] = (
+                        asset[1] / sum_of_probabilities
+                    ) * max_probability
                 weights["EQ:USDC-USD"] = 1 - max_probability
         return weights
 
