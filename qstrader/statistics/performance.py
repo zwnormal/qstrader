@@ -8,22 +8,22 @@ def aggregate_returns(returns, convert_to):
     """
     Aggregates returns by day, week, month, or year.
     """
+
     def cumulate_returns(x):
         return np.exp(np.log(1 + x).cumsum()).iloc[-1] - 1
 
-    if convert_to == 'weekly':
+    if convert_to == "weekly":
         return returns.groupby(
-            [lambda x: x.year,
-             lambda x: x.month,
-             lambda x: x.isocalendar()[1]]).apply(cumulate_returns)
-    elif convert_to == 'monthly':
-        return returns.groupby(
-            [lambda x: x.year, lambda x: x.month]).apply(cumulate_returns)
-    elif convert_to == 'yearly':
-        return returns.groupby(
-            [lambda x: x.year]).apply(cumulate_returns)
+            [lambda x: x.year, lambda x: x.month, lambda x: x.isocalendar()[1]]
+        ).apply(cumulate_returns)
+    elif convert_to == "monthly":
+        return returns.groupby([lambda x: x.year, lambda x: x.month]).apply(
+            cumulate_returns
+        )
+    elif convert_to == "yearly":
+        return returns.groupby([lambda x: x.year]).apply(cumulate_returns)
     else:
-        ValueError('convert_to must be weekly, monthly or yearly')
+        ValueError("convert_to must be weekly, monthly or yearly")
 
 
 def create_cagr(equity, periods=252):
@@ -89,10 +89,9 @@ def create_drawdowns(returns):
     # Calculate the drawdown and duration statistics
     perf = pd.DataFrame(index=idx)
     perf["Drawdown"] = (hwm - returns) / hwm
-    perf.loc[perf.index[0], 'Drawdown'] = 0.0
+    perf.loc[perf.index[0], "Drawdown"] = 0.0
     perf["DurationCheck"] = np.where(perf["Drawdown"] == 0, 0, 1)
     duration = max(
-        sum(1 for i in g if i == 1)
-        for k, g in groupby(perf["DurationCheck"])
+        sum(1 for i in g if i == 1) for k, g in groupby(perf["DurationCheck"])
     )
     return perf["Drawdown"], np.max(perf["Drawdown"]), duration

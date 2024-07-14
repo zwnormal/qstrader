@@ -2,20 +2,14 @@ import numpy as np
 
 
 class BacktestDataHandler(object):
-    """
-    """
+    """ """
 
-    def __init__(
-        self,
-        universe,
-        data_sources=None
-    ):
+    def __init__(self, universe, data_sources=None):
         self.universe = universe
         self.data_sources = data_sources
 
     def get_asset_latest_bid_price(self, dt, asset_symbol):
-        """
-        """
+        """ """
         # TODO: Check for asset in Universe
         bid = np.nan
         for ds in self.data_sources:
@@ -28,8 +22,7 @@ class BacktestDataHandler(object):
         return bid
 
     def get_asset_latest_ask_price(self, dt, asset_symbol):
-        """
-        """
+        """ """
         # TODO: Check for asset in Universe
         ask = np.nan
         for ds in self.data_sources:
@@ -42,8 +35,7 @@ class BacktestDataHandler(object):
         return ask
 
     def get_asset_latest_bid_ask_price(self, dt, asset_symbol):
-        """
-        """
+        """ """
         # TODO: For the moment this is sufficient for OHLCV
         # data, which only usually provides mid prices
         # This will need to be revisited when handling intraday
@@ -54,8 +46,7 @@ class BacktestDataHandler(object):
         return (bid, bid)
 
     def get_asset_latest_mid_price(self, dt, asset_symbol):
-        """
-        """
+        """ """
         bid_ask = self.get_asset_latest_bid_ask_price(dt, asset_symbol)
         try:
             mid = (bid_ask[0] + bid_ask[1]) / 2.0
@@ -67,8 +58,7 @@ class BacktestDataHandler(object):
     def get_assets_historical_range_close_price(
         self, start_dt, end_dt, asset_symbols, adjusted=False
     ):
-        """
-        """
+        """ """
         prices_df = None
         for ds in self.data_sources:
             try:

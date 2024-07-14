@@ -4,12 +4,7 @@ from qstrader.asset.cash import Cash
 
 
 @pytest.mark.parametrize(
-    'currency,expected',
-    [
-        ('USD', 'USD'),
-        ('GBP', 'GBP'),
-        ('EUR', 'EUR')
-    ]
+    "currency,expected", [("USD", "USD"), ("GBP", "GBP"), ("EUR", "EUR")]
 )
 def test_cash(currency, expected):
     """

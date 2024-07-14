@@ -10,6 +10,4 @@ class TradingSession(object):
 
     @abstractmethod
     def run(self):
-        raise NotImplementedError(
-            "Should implement run()"
-        )
+        raise NotImplementedError("Should implement run()")

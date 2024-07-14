@@ -29,7 +29,7 @@ class ExecutionHandler(object):
         universe,
         submit_orders=False,
         execution_algo=None,
-        data_handler=None
+        data_handler=None,
     ):
         self.broker = broker
         self.broker_portfolio_id = broker_portfolio_id
@@ -74,9 +74,7 @@ class ExecutionHandler(object):
         -------
         `None`
         """
-        final_orders = self._apply_execution_algo_to_rebalances(
-            dt, rebalance_orders
-        )
+        final_orders = self._apply_execution_algo_to_rebalances(dt, rebalance_orders)
 
         # If order submission is specified then send the
         # individual order items to the Broker instance

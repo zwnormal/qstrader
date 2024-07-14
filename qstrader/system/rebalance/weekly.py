@@ -25,13 +25,7 @@ class WeeklyRebalance(Rebalance):
         Whether to carry out the rebalance at market open/close.
     """
 
-    def __init__(
-        self,
-        start_date,
-        end_date,
-        weekday,
-        pre_market=False
-    ):
+    def __init__(self, start_date, end_date, weekday, pre_market=False):
         self.weekday = self._set_weekday(weekday)
         self.start_date = start_date
         self.end_date = end_date
@@ -92,15 +86,11 @@ class WeeklyRebalance(Rebalance):
             The list of rebalance timestamps.
         """
         rebalance_dates = pd.date_range(
-            start=self.start_date,
-            end=self.end_date,
-            freq='W-%s' % self.weekday
+            start=self.start_date, end=self.end_date, freq="W-%s" % self.weekday
         )
 
         rebalance_times = [
-            pd.Timestamp(
-                "%s %s" % (date, self.pre_market_time), tz=pytz.utc
-            )
+            pd.Timestamp("%s %s" % (date, self.pre_market_time), tz=pytz.utc)
             for date in rebalance_dates
         ]
 

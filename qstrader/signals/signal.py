@@ -36,9 +36,7 @@ class Signal(object):
         `AssetPriceBuffers`
             Stores the asset price buffers for the signal.
         """
-        return AssetPriceBuffers(
-            self.assets, lookbacks=self.lookbacks
-        )
+        return AssetPriceBuffers(self.assets, lookbacks=self.lookbacks)
 
     def append(self, asset, price):
         """
@@ -73,6 +71,4 @@ class Signal(object):
 
     @abstractmethod
     def __call__(self, asset, lookback):
-        raise NotImplementedError(
-            "Should implement __call__()"
-        )
+        raise NotImplementedError("Should implement __call__()")

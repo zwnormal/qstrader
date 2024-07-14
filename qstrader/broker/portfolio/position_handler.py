@@ -36,34 +36,22 @@ class PositionHandler(object):
         """
         Calculate the sum of all the positions' market values.
         """
-        return sum(
-            pos.market_value
-            for asset, pos in self.positions.items()
-        )
+        return sum(pos.market_value for asset, pos in self.positions.items())
 
     def total_unrealised_pnl(self):
         """
         Calculate the sum of all the positions' unrealised P&Ls.
         """
-        return sum(
-            pos.unrealised_pnl
-            for asset, pos in self.positions.items()
-        )
+        return sum(pos.unrealised_pnl for asset, pos in self.positions.items())
 
     def total_realised_pnl(self):
         """
         Calculate the sum of all the positions' realised P&Ls.
         """
-        return sum(
-            pos.realised_pnl
-            for asset, pos in self.positions.items()
-        )
+        return sum(pos.realised_pnl for asset, pos in self.positions.items())
 
     def total_pnl(self):
         """
         Calculate the sum of all the positions' P&Ls.
         """
-        return sum(
-            pos.total_pnl
-            for asset, pos in self.positions.items()
-        )
+        return sum(pos.total_pnl for asset, pos in self.positions.items())

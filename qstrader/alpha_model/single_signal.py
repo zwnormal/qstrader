@@ -16,12 +16,7 @@ class SingleSignalAlphaModel(AlphaModel):
         An optional DataHandler used to preserve interface across AlphaModels.
     """
 
-    def __init__(
-        self,
-        universe,
-        signal=1.0,
-        data_handler=None
-    ):
+    def __init__(self, universe, signal=1.0, data_handler=None):
         self.universe = universe
         self.signal = signal
         self.data_handler = data_handler
@@ -35,7 +30,7 @@ class SingleSignalAlphaModel(AlphaModel):
         ----------
         dt : `pd.Timestamp`
             The time 'now' used to obtain appropriate data and universe
-            for the the signals.
+            for the signals.
 
         Returns
         -------

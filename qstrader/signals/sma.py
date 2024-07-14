@@ -39,7 +39,7 @@ class SMASignal(Signal):
         `float`
             The SMA value ('trend') for the period.
         """
-        return np.mean(self.buffers.prices['%s_%s' % (asset, lookback)])
+        return np.mean(self.buffers.prices["%s_%s" % (asset, lookback)])
 
     def __call__(self, asset, lookback):
         """

@@ -39,6 +39,7 @@ class DynamicUniverse(Universe):
             The list of Asset symbols in the static Universe.
         """
         return [
-            asset for asset, asset_date in self.asset_dates.items()
+            asset
+            for asset, asset_date in self.asset_dates.items()
             if asset_date is not None and dt >= asset_date
         ]

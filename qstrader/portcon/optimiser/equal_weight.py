@@ -18,11 +18,7 @@ class EqualWeightPortfolioOptimiser(PortfolioOptimiser):
         PortfolioOptimisers.
     """
 
-    def __init__(
-        self,
-        scale=1.0,
-        data_handler=None
-    ):
+    def __init__(self, scale=1.0, data_handler=None):
         self.scale = scale
         self.data_handler = data_handler
 

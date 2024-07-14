@@ -11,6 +11,4 @@ class OrderSizer(object):
 
     @abstractmethod
     def __call__(self, dt, weights):
-        raise NotImplementedError(
-            "Should implement call()"
-        )
+        raise NotImplementedError("Should implement call()")

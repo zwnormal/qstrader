@@ -11,18 +11,12 @@ class FeeModel(object):
 
     @abstractmethod
     def _calc_commission(self, asset, quantity, consideration, broker=None):
-        raise NotImplementedError(
-            "Should implement _calc_commission()"
-        )
+        raise NotImplementedError("Should implement _calc_commission()")
 
     @abstractmethod
     def _calc_tax(self, asset, quantity, consideration, broker=None):
-        raise NotImplementedError(
-            "Should implement _calc_tax()"
-        )
+        raise NotImplementedError("Should implement _calc_tax()")
 
     @abstractmethod
     def calc_total_cost(self, asset, quantity, consideration, broker=None):
-        raise NotImplementedError(
-            "Should implement calc_total_cost()"
-        )
+        raise NotImplementedError("Should implement calc_total_cost()")

@@ -45,7 +45,7 @@ class VolatilitySignal(Signal):
         `str`
             The lookup key.
         """
-        return '%s_%s' % (asset, lookback + 1)
+        return "%s_%s" % (asset, lookback + 1)
 
     def _annualised_vol(self, asset, lookback):
         """
@@ -66,11 +66,7 @@ class VolatilitySignal(Signal):
             The annualised volatility of returns.
         """
         series = pd.Series(
-            self.buffers.prices[
-                VolatilitySignal._asset_lookback_key(
-                    asset, lookback
-                )
-            ]
+            self.buffers.prices[VolatilitySignal._asset_lookback_key(asset, lookback)]
         )
         returns = series.pct_change().dropna().to_numpy()
 

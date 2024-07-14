@@ -6,45 +6,45 @@ from qstrader.asset.universe.dynamic import DynamicUniverse
 
 
 @pytest.mark.parametrize(
-    'asset_dates,dt,expected',
+    "asset_dates,dt,expected",
     [
         (
             {
-                'EQ:SPY': pd.Timestamp('1993-01-01 14:30:00', tz=pytz.utc),
-                'EQ:AGG': pd.Timestamp('2003-01-01 14:30:00', tz=pytz.utc),
-                'EQ:TLT': pd.Timestamp('2012-01-01 14:30:00', tz=pytz.utc)
+                "EQ:SPY": pd.Timestamp("1993-01-01 14:30:00", tz=pytz.utc),
+                "EQ:AGG": pd.Timestamp("2003-01-01 14:30:00", tz=pytz.utc),
+                "EQ:TLT": pd.Timestamp("2012-01-01 14:30:00", tz=pytz.utc),
             },
-            pd.Timestamp('1990-01-01 14:30:00', tz=pytz.utc),
-            []
+            pd.Timestamp("1990-01-01 14:30:00", tz=pytz.utc),
+            [],
         ),
         (
             {
-                'EQ:SPY': pd.Timestamp('1993-01-01 14:30:00', tz=pytz.utc),
-                'EQ:AGG': pd.Timestamp('2003-01-01 14:30:00', tz=pytz.utc),
-                'EQ:TLT': pd.Timestamp('2012-01-01 14:30:00', tz=pytz.utc)
+                "EQ:SPY": pd.Timestamp("1993-01-01 14:30:00", tz=pytz.utc),
+                "EQ:AGG": pd.Timestamp("2003-01-01 14:30:00", tz=pytz.utc),
+                "EQ:TLT": pd.Timestamp("2012-01-01 14:30:00", tz=pytz.utc),
             },
-            pd.Timestamp('1995-01-01 14:30:00', tz=pytz.utc),
-            ['EQ:SPY']
+            pd.Timestamp("1995-01-01 14:30:00", tz=pytz.utc),
+            ["EQ:SPY"],
         ),
         (
             {
-                'EQ:SPY': pd.Timestamp('1993-01-01 14:30:00', tz=pytz.utc),
-                'EQ:AGG': pd.Timestamp('2003-01-01 14:30:00', tz=pytz.utc),
-                'EQ:TLT': pd.Timestamp('2012-01-01 14:30:00', tz=pytz.utc)
+                "EQ:SPY": pd.Timestamp("1993-01-01 14:30:00", tz=pytz.utc),
+                "EQ:AGG": pd.Timestamp("2003-01-01 14:30:00", tz=pytz.utc),
+                "EQ:TLT": pd.Timestamp("2012-01-01 14:30:00", tz=pytz.utc),
             },
-            pd.Timestamp('2005-01-01 14:30:00', tz=pytz.utc),
-            ['EQ:SPY', 'EQ:AGG']
+            pd.Timestamp("2005-01-01 14:30:00", tz=pytz.utc),
+            ["EQ:SPY", "EQ:AGG"],
         ),
         (
             {
-                'EQ:SPY': pd.Timestamp('1993-01-01 14:30:00', tz=pytz.utc),
-                'EQ:AGG': pd.Timestamp('2003-01-01 14:30:00', tz=pytz.utc),
-                'EQ:TLT': pd.Timestamp('2012-01-01 14:30:00', tz=pytz.utc)
+                "EQ:SPY": pd.Timestamp("1993-01-01 14:30:00", tz=pytz.utc),
+                "EQ:AGG": pd.Timestamp("2003-01-01 14:30:00", tz=pytz.utc),
+                "EQ:TLT": pd.Timestamp("2012-01-01 14:30:00", tz=pytz.utc),
             },
-            pd.Timestamp('2015-01-01 14:30:00', tz=pytz.utc),
-            ['EQ:SPY', 'EQ:AGG', 'EQ:TLT']
-        )
-    ]
+            pd.Timestamp("2015-01-01 14:30:00", tz=pytz.utc),
+            ["EQ:SPY", "EQ:AGG", "EQ:TLT"],
+        ),
+    ],
 )
 def test_dynamic_universe(asset_dates, dt, expected):
     """

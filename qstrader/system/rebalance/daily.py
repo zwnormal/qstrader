@@ -23,12 +23,7 @@ class DailyRebalance(Rebalance):
         Whether to carry out the rebalance at market open/close.
     """
 
-    def __init__(
-        self,
-        start_date,
-        end_date,
-        pre_market=False
-    ):
+    def __init__(self, start_date, end_date, pre_market=False):
         self.start_date = start_date
         self.end_date = end_date
         self.market_time = self._set_market_time(pre_market)
@@ -62,13 +57,12 @@ class DailyRebalance(Rebalance):
             The list of rebalance timestamps.
         """
         rebalance_dates = pd.bdate_range(
-            start=self.start_date, end=self.end_date,
+            start=self.start_date,
+            end=self.end_date,
         )
 
         rebalance_times = [
-            pd.Timestamp(
-                "%s %s" % (date, self.market_time), tz=pytz.utc
-            )
+            pd.Timestamp("%s %s" % (date, self.market_time), tz=pytz.utc)
             for date in rebalance_dates
         ]
 

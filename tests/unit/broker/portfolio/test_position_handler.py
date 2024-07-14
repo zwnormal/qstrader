@@ -17,15 +17,15 @@ def test_transact_position_new_position():
     # Create the PositionHandler, Transaction and
     # carry out a transaction
     ph = PositionHandler()
-    asset = 'EQ:AMZN'
+    asset = "EQ:AMZN"
 
     transaction = Transaction(
         asset,
         quantity=100,
-        dt=pd.Timestamp('2015-05-06 15:00:00', tz=pytz.UTC),
+        dt=pd.Timestamp("2015-05-06 15:00:00", tz=pytz.UTC),
         price=960.0,
         order_id=123,
-        commission=26.83
+        commission=26.83,
     )
     ph.transact_position(transaction)
 
@@ -48,27 +48,17 @@ def test_transact_position_current_position():
     # Create the PositionHandler, Transaction and
     # carry out a transaction
     ph = PositionHandler()
-    asset = 'EQ:AMZN'
-    dt = pd.Timestamp('2015-05-06 15:00:00', tz=pytz.UTC)
-    new_dt = pd.Timestamp('2015-05-06 16:00:00', tz=pytz.UTC)
+    asset = "EQ:AMZN"
+    dt = pd.Timestamp("2015-05-06 15:00:00", tz=pytz.UTC)
+    new_dt = pd.Timestamp("2015-05-06 16:00:00", tz=pytz.UTC)
 
     transaction_long = Transaction(
-        asset,
-        quantity=100,
-        dt=dt,
-        price=960.0,
-        order_id=123,
-        commission=26.83
+        asset, quantity=100, dt=dt, price=960.0, order_id=123, commission=26.83
     )
     ph.transact_position(transaction_long)
 
     transaction_long_again = Transaction(
-        asset,
-        quantity=200,
-        dt=new_dt,
-        price=990.0,
-        order_id=234,
-        commission=18.53
+        asset, quantity=200, dt=new_dt, price=990.0, order_id=234, commission=18.53
     )
     ph.transact_position(transaction_long_again)
 
@@ -91,26 +81,17 @@ def test_transact_position_quantity_zero():
     # Create the PositionHandler, Transaction and
     # carry out a transaction
     ph = PositionHandler()
-    asset = 'EQ:AMZN'
-    dt = pd.Timestamp('2015-05-06 15:00:00', tz=pytz.UTC)
-    new_dt = pd.Timestamp('2015-05-06 16:00:00', tz=pytz.UTC)
+    asset = "EQ:AMZN"
+    dt = pd.Timestamp("2015-05-06 15:00:00", tz=pytz.UTC)
+    new_dt = pd.Timestamp("2015-05-06 16:00:00", tz=pytz.UTC)
 
     transaction_long = Transaction(
-        asset,
-        quantity=100,
-        dt=dt,
-        price=960.0,
-        order_id=123, commission=26.83
+        asset, quantity=100, dt=dt, price=960.0, order_id=123, commission=26.83
     )
     ph.transact_position(transaction_long)
 
     transaction_close = Transaction(
-        asset,
-        quantity=-100,
-        dt=new_dt,
-        price=980.0,
-        order_id=234,
-        commission=18.53
+        asset, quantity=-100, dt=new_dt, price=980.0, order_id=234, commission=18.53
     )
     ph.transact_position(transaction_close)
 
@@ -141,28 +122,18 @@ def test_total_values_for_two_separate_transactions():
     ph = PositionHandler()
 
     # Asset 1
-    asset1 = 'EQ:AMZN'
-    dt1 = pd.Timestamp('2015-05-06 15:00:00', tz=pytz.UTC)
+    asset1 = "EQ:AMZN"
+    dt1 = pd.Timestamp("2015-05-06 15:00:00", tz=pytz.UTC)
     trans_pos_1 = Transaction(
-        asset1,
-        quantity=75,
-        dt=dt1,
-        price=483.45,
-        order_id=1,
-        commission=15.97
+        asset1, quantity=75, dt=dt1, price=483.45, order_id=1, commission=15.97
     )
     ph.transact_position(trans_pos_1)
 
     # Asset 2
-    asset2 = 'EQ:MSFT'
-    dt2 = pd.Timestamp('2015-05-07 15:00:00', tz=pytz.UTC)
+    asset2 = "EQ:MSFT"
+    dt2 = pd.Timestamp("2015-05-07 15:00:00", tz=pytz.UTC)
     trans_pos_2 = Transaction(
-        asset2,
-        quantity=250,
-        dt=dt2,
-        price=142.58,
-        order_id=2,
-        commission=8.35
+        asset2, quantity=250, dt=dt2, price=142.58, order_id=2, commission=8.35
     )
     ph.transact_position(trans_pos_2)
 

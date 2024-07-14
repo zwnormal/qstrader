@@ -3,7 +3,7 @@ from qstrader.asset.asset import Asset
 
 class Equity(Asset):
     """
-    Stores meta data about an equity common stock or ETF.
+    Stores metadata about an equity common stock or ETF.
 
     Parameters
     ----------
@@ -20,12 +20,7 @@ class Equity(Asset):
         as UK stamp duty.
     """
 
-    def __init__(
-        self,
-        name,
-        symbol,
-        tax_exempt=True
-    ):
+    def __init__(self, name, symbol, tax_exempt=True):
         self.cash_like = False
         self.name = name
         self.symbol = symbol
@@ -35,8 +30,8 @@ class Equity(Asset):
         """
         String representation of the Equity Asset.
         """
-        return (
-            "Equity(name='%s', symbol='%s', tax_exempt=%s)" % (
-                self.name, self.symbol, self.tax_exempt
-            )
+        return "Equity(name='%s', symbol='%s', tax_exempt=%s)" % (
+            self.name,
+            self.symbol,
+            self.tax_exempt,
         )

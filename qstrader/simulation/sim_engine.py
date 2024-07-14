@@ -23,6 +23,4 @@ class SimulationEngine(object):
 
     @abstractmethod
     def __iter__(self):
-        raise NotImplementedError(
-            "Should implement __iter__()"
-        )
+        raise NotImplementedError("Should implement __iter__()")

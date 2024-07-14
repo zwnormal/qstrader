@@ -67,7 +67,7 @@ def test_initial_settings_for_default_simulated_broker():
     Tests that the SimulatedBroker settings are set
     correctly for default settings.
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -84,8 +84,8 @@ def test_initial_settings_for_default_simulated_broker():
 
     tcb1 = dict(
         zip(
-            settings.SUPPORTED['CURRENCIES'],
-            [0.0] * len(settings.SUPPORTED['CURRENCIES'])
+            settings.SUPPORTED["CURRENCIES"],
+            [0.0] * len(settings.SUPPORTED["CURRENCIES"]),
         )
     )
 
@@ -95,9 +95,13 @@ def test_initial_settings_for_default_simulated_broker():
 
     # Test a SimulatedBroker with some parameters set
     sb2 = SimulatedBroker(
-        start_dt, exchange, data_handler, account_id="ACCT1234",
-        base_currency="GBP", initial_funds=1e6,
-        fee_model=ZeroFeeModel()
+        start_dt,
+        exchange,
+        data_handler,
+        account_id="ACCT1234",
+        base_currency="GBP",
+        initial_funds=1e6,
+        fee_model=ZeroFeeModel(),
     )
 
     assert sb2.start_dt == start_dt
@@ -110,8 +114,8 @@ def test_initial_settings_for_default_simulated_broker():
 
     tcb2 = dict(
         zip(
-            settings.SUPPORTED['CURRENCIES'],
-            [0.0] * len(settings.SUPPORTED['CURRENCIES'])
+            settings.SUPPORTED["CURRENCIES"],
+            [0.0] * len(settings.SUPPORTED["CURRENCIES"]),
         )
     )
     tcb2["GBP"] = 1e6
@@ -127,14 +131,12 @@ def test_bad_set_base_currency():
     if a non-supported currency is attempted to be
     set as the base currency.
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
     with pytest.raises(ValueError):
-        SimulatedBroker(
-            start_dt, exchange, data_handler, base_currency="XYZ"
-        )
+        SimulatedBroker(start_dt, exchange, data_handler, base_currency="XYZ")
 
 
 def test_good_set_base_currency():
@@ -142,13 +144,11 @@ def test_good_set_base_currency():
     Checks _set_base_currency sets the currency
     correctly if it is supported by QSTrader.
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
-    sb = SimulatedBroker(
-        start_dt, exchange, data_handler, base_currency="EUR"
-    )
+    sb = SimulatedBroker(start_dt, exchange, data_handler, base_currency="EUR")
     assert sb.base_currency == "EUR"
 
 
@@ -157,14 +157,12 @@ def test_bad_set_initial_funds():
     Checks _set_initial_funds raises ValueError
     if initial funds amount is negative.
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
     with pytest.raises(ValueError):
-        SimulatedBroker(
-            start_dt, exchange, data_handler, initial_funds=-56.34
-        )
+        SimulatedBroker(start_dt, exchange, data_handler, initial_funds=-56.34)
 
 
 def test_good_set_initial_funds():
@@ -172,7 +170,7 @@ def test_good_set_initial_funds():
     Checks _set_initial_funds sets the initial funds
     correctly if it is a positive floating point value.
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -186,7 +184,7 @@ def test_all_cases_of_set_broker_commission():
     appropriate broker commission model depending upon
     user choice.
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -197,17 +195,13 @@ def test_all_cases_of_set_broker_commission():
     # Broker commission is specified as a subclass
     # of FeeModel abstract base class
     bc2 = ZeroFeeModel()
-    sb2 = SimulatedBroker(
-        start_dt, exchange, data_handler, fee_model=bc2
-    )
+    sb2 = SimulatedBroker(start_dt, exchange, data_handler, fee_model=bc2)
     assert sb2.fee_model.__class__.__name__ == "ZeroFeeModel"
 
     # FeeModel is mis-specified and thus
     # raises a TypeError
     with pytest.raises(TypeError):
-        SimulatedBroker(
-            start_dt, exchange, data_handler, fee_model="bad_fee_model"
-        )
+        SimulatedBroker(start_dt, exchange, data_handler, fee_model="bad_fee_model")
 
 
 def test_set_cash_balances():
@@ -215,30 +209,26 @@ def test_set_cash_balances():
     Checks _set_cash_balances for zero and non-zero
     initial_funds.
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
     # Zero initial funds
-    sb1 = SimulatedBroker(
-        start_dt, exchange, data_handler, initial_funds=0.0
-    )
+    sb1 = SimulatedBroker(start_dt, exchange, data_handler, initial_funds=0.0)
     tcb1 = dict(
         zip(
-            settings.SUPPORTED['CURRENCIES'],
-            [0.0] * len(settings.SUPPORTED['CURRENCIES'])
+            settings.SUPPORTED["CURRENCIES"],
+            [0.0] * len(settings.SUPPORTED["CURRENCIES"]),
         )
     )
     assert sb1._set_cash_balances() == tcb1
 
     # Non-zero initial funds
-    sb2 = SimulatedBroker(
-        start_dt, exchange, data_handler, initial_funds=12345.0
-    )
+    sb2 = SimulatedBroker(start_dt, exchange, data_handler, initial_funds=12345.0)
     tcb2 = dict(
         zip(
-            settings.SUPPORTED['CURRENCIES'],
-            [0.0] * len(settings.SUPPORTED['CURRENCIES'])
+            settings.SUPPORTED["CURRENCIES"],
+            [0.0] * len(settings.SUPPORTED["CURRENCIES"]),
         )
     )
     tcb2["USD"] = 12345.0
@@ -250,7 +240,7 @@ def test_set_initial_portfolios():
     Check _set_initial_portfolios method for return
     of an empty dictionary.
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -263,7 +253,7 @@ def test_set_initial_open_orders():
     Check _set_initial_open_orders method for return
     of an empty dictionary.
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -277,7 +267,7 @@ def test_subscribe_funds_to_account():
     * Raising ValueError with negative amount
     * Correctly setting cash_balances for a positive amount
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -299,7 +289,7 @@ def test_withdraw_funds_from_account():
     * Raising ValueError for lack of cash
     * Correctly setting cash_balances for positive amount
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -326,20 +316,18 @@ def test_get_account_cash_balance():
     dictionary, then raise ValueError
     * Otherwise, return the appropriate cash balance
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
-    sb = SimulatedBroker(
-        start_dt, exchange, data_handler, initial_funds=1000.0
-    )
+    sb = SimulatedBroker(start_dt, exchange, data_handler, initial_funds=1000.0)
 
     # If currency is None, return the cash balances
     sbcb1 = sb.get_account_cash_balance()
     tcb1 = dict(
         zip(
-            settings.SUPPORTED['CURRENCIES'],
-            [0.0] * len(settings.SUPPORTED['CURRENCIES'])
+            settings.SUPPORTED["CURRENCIES"],
+            [0.0] * len(settings.SUPPORTED["CURRENCIES"]),
         )
     )
     tcb1["USD"] = 1000.0
@@ -360,7 +348,7 @@ def test_get_account_total_market_value():
     Tests get_account_total_market_value method for:
     * The correct market values after cash is subscribed.
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -377,12 +365,7 @@ def test_get_account_total_market_value():
 
     # Check that the market value is correct
     res_equity = sb.get_account_total_equity()
-    test_equity = {
-        "1": 100000.0,
-        "2": 100000.0,
-        "3": 100000.0,
-        "master": 300000.0
-    }
+    test_equity = {"1": 100000.0, "2": 100000.0, "3": 100000.0, "master": 300000.0}
     assert res_equity == test_equity
 
 
@@ -394,7 +377,7 @@ def test_create_portfolio():
     * If it isn't, check that they portfolio and open
     orders dictionary was created correctly.
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -411,9 +394,7 @@ def test_create_portfolio():
     # If portfolio is already in the dictionary
     # then raise ValueError
     with pytest.raises(ValueError):
-        sb.create_portfolio(
-            portfolio_id=1234, name="My Portfolio"
-        )
+        sb.create_portfolio(portfolio_id=1234, name="My Portfolio")
 
 
 def test_list_all_portfolio():
@@ -422,7 +403,7 @@ def test_list_all_portfolio():
     * If empty portfolio dictionary, return empty list
     * If non-empty, return sorted list via the portfolio IDs
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -436,10 +417,7 @@ def test_list_all_portfolio():
     sb.create_portfolio(portfolio_id="z154", name="My Portfolio #2")
     sb.create_portfolio(portfolio_id="abcd", name="My Portfolio #3")
 
-    res_ports = sorted([
-        p.portfolio_id
-        for p in sb.list_all_portfolios()
-    ])
+    res_ports = sorted([p.portfolio_id for p in sb.list_all_portfolios()])
     test_ports = ["1234", "abcd", "z154"]
     assert res_ports == test_ports
 
@@ -451,7 +429,7 @@ def test_subscribe_funds_to_portfolio():
     * Raising ValueError if portfolio does not exist
     * Correctly setting cash_balances for a positive amount
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -487,7 +465,7 @@ def test_withdraw_funds_from_portfolio():
     * Raising ValueError for a lack of cash
     * Correctly setting cash_balances for a positive amount
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -522,7 +500,7 @@ def test_get_portfolio_cash_balance():
     * Raising ValueError if portfolio_id not in keys
     * Correctly obtaining the value after cash transfers
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -547,7 +525,7 @@ def test_get_portfolio_total_market_value():
     * Raising ValueError if portfolio_id not in keys
     * Correctly obtaining the market value after cash transfers
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
@@ -576,14 +554,14 @@ def test_submit_order():
     * Checks that portfolio values are correct after
     carrying out a transaction
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
 
     # Raising KeyError if portfolio_id not in keys
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 
     sb = SimulatedBroker(start_dt, exchange, data_handler)
-    asset = 'EQ:RDSB'
+    asset = "EQ:RDSB"
     quantity = 100
     order = OrderMock(asset, quantity)
     with pytest.raises(KeyError):
@@ -647,8 +625,8 @@ def test_update_sets_correct_time():
     Tests that the update method sets the current
     time correctly.
     """
-    start_dt = pd.Timestamp('2017-10-05 08:00:00', tz=pytz.UTC)
-    new_dt = pd.Timestamp('2017-10-07 08:00:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2017-10-05 08:00:00", tz=pytz.UTC)
+    new_dt = pd.Timestamp("2017-10-07 08:00:00", tz=pytz.UTC)
     exchange = ExchangeMock()
     data_handler = DataHandlerMock()
 

@@ -31,12 +31,7 @@ class Portfolio(object):
     """
 
     def __init__(
-        self,
-        start_dt,
-        starting_cash=0.0,
-        currency="USD",
-        portfolio_id=None,
-        name=None
+        self, start_dt, starting_cash=0.0, currency="USD", portfolio_id=None, name=None
     ):
         """
         Initialise the Portfolio object with a PositionHandler,
@@ -53,12 +48,13 @@ class Portfolio(object):
         self.pos_handler = PositionHandler()
         self.history = []
 
-        self.logger = logging.getLogger('Portfolio')
+        self.logger = logging.getLogger("Portfolio")
         self.logger.setLevel(logging.DEBUG)
         self.logger.info(
-            '(%s) Portfolio "%s" instance initialised' % (
+            '(%s) Portfolio "%s" instance initialised'
+            % (
                 self.current_dt.strftime(settings.LOGGING["DATE_FORMAT"]),
-                self.portfolio_id
+                self.portfolio_id,
             )
         )
 
@@ -80,11 +76,12 @@ class Portfolio(object):
 
         self.logger.info(
             '(%s) Funds subscribed to portfolio "%s" '
-            '- Credit: %0.2f, Balance: %0.2f' % (
+            "- Credit: %0.2f, Balance: %0.2f"
+            % (
                 self.current_dt.strftime(settings.LOGGING["DATE_FORMAT"]),
                 self.portfolio_id,
                 round(self.starting_cash, 2),
-                round(self.starting_cash, 2)
+                round(self.starting_cash, 2),
             )
         )
 
@@ -129,16 +126,15 @@ class Portfolio(object):
         """
         if dt < self.current_dt:
             raise ValueError(
-                'Subscription datetime (%s) is earlier than '
-                'current portfolio datetime (%s). Cannot '
-                'subscribe funds.' % (dt, self.current_dt)
+                "Subscription datetime (%s) is earlier than "
+                "current portfolio datetime (%s). Cannot "
+                "subscribe funds." % (dt, self.current_dt)
             )
         self.current_dt = dt
 
         if amount < 0.0:
             raise ValueError(
-                'Cannot credit negative amount: '
-                '%s to the portfolio.' % amount
+                "Cannot credit negative amount: " "%s to the portfolio." % amount
             )
 
         self.cash += amount
@@ -149,10 +145,12 @@ class Portfolio(object):
 
         self.logger.info(
             '(%s) Funds subscribed to portfolio "%s" '
-            '- Credit: %0.2f, Balance: %0.2f' % (
+            "- Credit: %0.2f, Balance: %0.2f"
+            % (
                 self.current_dt.strftime(settings.LOGGING["DATE_FORMAT"]),
-                self.portfolio_id, round(amount, 2),
-                round(self.cash, 2)
+                self.portfolio_id,
+                round(amount, 2),
+                round(self.cash, 2),
             )
         )
 
@@ -165,25 +163,22 @@ class Portfolio(object):
         # enough in the portfolio to withdraw the funds
         if dt < self.current_dt:
             raise ValueError(
-                'Withdrawal datetime (%s) is earlier than '
-                'current portfolio datetime (%s). Cannot '
-                'withdraw funds.' % (dt, self.current_dt)
+                "Withdrawal datetime (%s) is earlier than "
+                "current portfolio datetime (%s). Cannot "
+                "withdraw funds." % (dt, self.current_dt)
             )
         self.current_dt = dt
 
         if amount < 0:
             raise ValueError(
-                'Cannot debit negative amount: '
-                '%0.2f from the portfolio.' % amount
+                "Cannot debit negative amount: " "%0.2f from the portfolio." % amount
             )
 
         if amount > self.cash:
             raise ValueError(
-                'Not enough cash in the portfolio to '
-                'withdraw. %s withdrawal request exceeds '
-                'current portfolio cash balance of %s.' % (
-                    amount, self.cash
-                )
+                "Not enough cash in the portfolio to "
+                "withdraw. %s withdrawal request exceeds "
+                "current portfolio cash balance of %s." % (amount, self.cash)
             )
 
         self.cash -= amount
@@ -194,10 +189,12 @@ class Portfolio(object):
 
         self.logger.info(
             '(%s) Funds withdrawn from portfolio "%s" '
-            '- Debit: %0.2f, Balance: %0.2f' % (
+            "- Debit: %0.2f, Balance: %0.2f"
+            % (
                 self.current_dt.strftime(settings.LOGGING["DATE_FORMAT"]),
-                self.portfolio_id, round(amount, 2),
-                round(self.cash, 2)
+                self.portfolio_id,
+                round(amount, 2),
+                round(self.cash, 2),
             )
         )
 
@@ -207,9 +204,9 @@ class Portfolio(object):
         """
         if txn.dt < self.current_dt:
             raise ValueError(
-                'Transaction datetime (%s) is earlier than '
-                'current portfolio datetime (%s). Cannot '
-                'transact assets.' % (txn.dt, self.current_dt)
+                "Transaction datetime (%s) is earlier than "
+                "current portfolio datetime (%s). Cannot "
+                "transact assets." % (txn.dt, self.current_dt)
             )
         self.current_dt = txn.dt
 
@@ -219,12 +216,11 @@ class Portfolio(object):
         if txn_total_cost > self.cash:
             if settings.PRINT_EVENTS:
                 print(
-                    'WARNING: Not enough cash in the portfolio to '
-                    'carry out transaction. Transaction cost of %s '
-                    'exceeds remaining cash of %s. Transaction '
-                    'will proceed with a negative cash balance.' % (
-                        txn_total_cost, self.cash
-                    )
+                    "WARNING: Not enough cash in the portfolio to "
+                    "carry out transaction. Transaction cost of %s "
+                    "exceeds remaining cash of %s. Transaction "
+                    "will proceed with a negative cash balance."
+                    % (txn_total_cost, self.cash)
                 )
 
         self.pos_handler.transact_position(txn)
@@ -234,37 +230,50 @@ class Portfolio(object):
         # Form Portfolio history details
         direction = "LONG" if txn.direction > 0 else "SHORT"
         description = "%s %s %s %0.2f %s" % (
-            direction, txn.quantity, txn.asset.upper(),
-            txn.price, datetime.datetime.strftime(txn.dt, "%d/%m/%Y")
+            direction,
+            txn.quantity,
+            txn.asset.upper(),
+            txn.price,
+            datetime.datetime.strftime(txn.dt, "%d/%m/%Y"),
         )
         if direction == "LONG":
             pe = PortfolioEvent(
-                dt=txn.dt, type='asset_transaction',
+                dt=txn.dt,
+                type="asset_transaction",
                 description=description,
-                debit=round(txn_total_cost, 2), credit=0.0,
-                balance=round(self.cash, 2)
+                debit=round(txn_total_cost, 2),
+                credit=0.0,
+                balance=round(self.cash, 2),
             )
             self.logger.info(
                 '(%s) Asset "%s" transacted LONG in portfolio "%s" '
-                '- Debit: %0.2f, Balance: %0.2f' % (
+                "- Debit: %0.2f, Balance: %0.2f"
+                % (
                     txn.dt.strftime(settings.LOGGING["DATE_FORMAT"]),
-                    txn.asset, self.portfolio_id,
-                    round(txn_total_cost, 2), round(self.cash, 2)
+                    txn.asset,
+                    self.portfolio_id,
+                    round(txn_total_cost, 2),
+                    round(self.cash, 2),
                 )
             )
         else:
             pe = PortfolioEvent(
-                dt=txn.dt, type='asset_transaction',
+                dt=txn.dt,
+                type="asset_transaction",
                 description=description,
-                debit=0.0, credit=-1.0 * round(txn_total_cost, 2),
-                balance=round(self.cash, 2)
+                debit=0.0,
+                credit=-1.0 * round(txn_total_cost, 2),
+                balance=round(self.cash, 2),
             )
             self.logger.info(
                 '(%s) Asset "%s" transacted SHORT in portfolio "%s" '
-                '- Credit: %0.2f, Balance: %0.2f' % (
+                "- Credit: %0.2f, Balance: %0.2f"
+                % (
                     txn.dt.strftime(settings.LOGGING["DATE_FORMAT"]),
-                    txn.asset, self.portfolio_id,
-                    -1.0 * round(txn_total_cost, 2), round(self.cash, 2)
+                    txn.asset,
+                    self.portfolio_id,
+                    -1.0 * round(txn_total_cost, 2),
+                    round(self.cash, 2),
                 )
             )
         self.history.append(pe)
@@ -287,13 +296,11 @@ class Portfolio(object):
                 "market_value": pos.market_value,
                 "unrealised_pnl": pos.unrealised_pnl,
                 "realised_pnl": pos.realised_pnl,
-                "total_pnl": pos.total_pnl
+                "total_pnl": pos.total_pnl,
             }
         return holdings
 
-    def update_market_value_of_asset(
-        self, asset, current_price, current_dt
-    ):
+    def update_market_value_of_asset(self, asset, current_price, current_dt):
         """
         Update the market value of the asset to the current
         trade price and date.
@@ -303,19 +310,15 @@ class Portfolio(object):
         else:
             if current_price < 0.0:
                 raise ValueError(
-                    'Current trade price of %s is negative for '
-                    'asset %s. Cannot update position.' % (
-                        current_price, asset
-                    )
+                    "Current trade price of %s is negative for "
+                    "asset %s. Cannot update position." % (current_price, asset)
                 )
 
             if current_dt < self.current_dt:
                 raise ValueError(
-                    'Current trade date of %s is earlier than '
-                    'current date %s of asset %s. Cannot update '
-                    'position.' % (
-                        current_dt, self.current_dt, asset
-                    )
+                    "Current trade date of %s is earlier than "
+                    "current date %s of asset %s. Cannot update "
+                    "position." % (current_dt, self.current_dt, asset)
                 )
 
             self.pos_handler.positions[asset].update_current_price(
@@ -328,7 +331,6 @@ class Portfolio(object):
         """
         records = [pe.to_dict() for pe in self.history]
         return pd.DataFrame.from_records(
-            records, columns=[
-                "date", "type", "description", "debit", "credit", "balance"
-            ]
+            records,
+            columns=["date", "type", "description", "debit", "credit", "balance"],
         ).set_index(keys=["date"])

@@ -11,6 +11,4 @@ class Rebalance(object):
 
     @abstractmethod
     def output_rebalances(self):
-        raise NotImplementedError(
-            "Should implement output_rebalances()"
-        )
+        raise NotImplementedError("Should implement output_rebalances()")

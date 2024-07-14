@@ -58,9 +58,7 @@ class DailyBusinessDaySimulationEngine(SimulationEngine):
         `list[pd.Timestamp]`
             The business day range list.
         """
-        days = pd.date_range(
-            self.starting_day, self.ending_day, freq=BDay()
-        )
+        days = pd.date_range(self.starting_day, self.ending_day, freq=BDay())
         return days
 
     def __iter__(self):
@@ -80,28 +78,22 @@ class DailyBusinessDaySimulationEngine(SimulationEngine):
 
             if self.pre_market:
                 yield SimulationEvent(
-                    pd.Timestamp(
-                        datetime.datetime(year, month, day), tz='UTC'
-                    ), event_type="pre_market"
+                    pd.Timestamp(datetime.datetime(year, month, day), tz="UTC"),
+                    event_type="pre_market",
                 )
 
             yield SimulationEvent(
-                pd.Timestamp(
-                    datetime.datetime(year, month, day, 14, 30),
-                    tz=pytz.utc
-                ), event_type="market_open"
+                pd.Timestamp(datetime.datetime(year, month, day, 14, 30), tz=pytz.utc),
+                event_type="market_open",
             )
 
             yield SimulationEvent(
-                pd.Timestamp(
-                    datetime.datetime(year, month, day, 21, 00),
-                    tz=pytz.utc
-                ), event_type="market_close"
+                pd.Timestamp(datetime.datetime(year, month, day, 21, 00), tz=pytz.utc),
+                event_type="market_close",
             )
 
             if self.post_market:
                 yield SimulationEvent(
-                    pd.Timestamp(
-                        datetime.datetime(year, month, day, 23, 59), tz='UTC'
-                    ), event_type="post_market"
+                    pd.Timestamp(datetime.datetime(year, month, day, 23, 59), tz="UTC"),
+                    event_type="post_market",
                 )

@@ -22,19 +22,11 @@ class LongShortLeveragedOrderSizer(OrderSizer):
         The amount of percentage leverage to use when sizing orders.
     """
 
-    def __init__(
-        self,
-        broker,
-        broker_portfolio_id,
-        data_handler,
-        gross_leverage=1.0
-    ):
+    def __init__(self, broker, broker_portfolio_id, data_handler, gross_leverage=1.0):
         self.broker = broker
         self.broker_portfolio_id = broker_portfolio_id
         self.data_handler = data_handler
-        self.gross_leverage = self._check_set_gross_leverage(
-            gross_leverage
-        )
+        self.gross_leverage = self._check_set_gross_leverage(gross_leverage)
 
     def _check_set_gross_leverage(self, gross_leverage):
         """
@@ -51,12 +43,10 @@ class LongShortLeveragedOrderSizer(OrderSizer):
         `float`
             The gross leverage percentage value.
         """
-        if (
-            gross_leverage <= 0.0
-        ):
+        if gross_leverage <= 0.0:
             raise ValueError(
                 'Gross leverage "%s" provided to long-short levered '
-                'order sizer is non positive.' % gross_leverage
+                "order sizer is non positive." % gross_leverage
             )
         else:
             return gross_leverage
@@ -97,10 +87,7 @@ class LongShortLeveragedOrderSizer(OrderSizer):
 
         gross_ratio = self.gross_leverage / gross_exposure
 
-        return {
-            asset: (weight * gross_ratio)
-            for asset, weight in weights.items()
-        }
+        return {asset: (weight * gross_ratio) for asset, weight in weights.items()}
 
     def __call__(self, dt, weights):
         """
@@ -143,16 +130,14 @@ class LongShortLeveragedOrderSizer(OrderSizer):
 
             # Calculate integral target asset quantity assuming broker costs
             after_cost_dollar_weight = pre_cost_dollar_weight - est_costs
-            asset_price = self.data_handler.get_asset_latest_ask_price(
-                dt, asset
-            )
+            asset_price = self.data_handler.get_asset_latest_ask_price(dt, asset)
 
             if np.isnan(asset_price):
                 raise ValueError(
                     'Asset price for "%s" at timestamp "%s" is Not-a-Number (NaN). '
-                    'This can occur if the chosen backtest start date is earlier '
-                    'than the first available price for a particular asset. Try '
-                    'modifying the backtest start date and re-running.' % (asset, dt)
+                    "This can occur if the chosen backtest start date is earlier "
+                    "than the first available price for a particular asset. Try "
+                    "modifying the backtest start date and re-running." % (asset, dt)
                 )
 
             # Truncate the after cost dollar weight
@@ -162,9 +147,7 @@ class LongShortLeveragedOrderSizer(OrderSizer):
                 if after_cost_dollar_weight >= 0.0
                 else np.ceil(after_cost_dollar_weight)
             )
-            asset_quantity = int(
-                truncated_after_cost_dollar_weight / asset_price
-            )
+            asset_quantity = int(truncated_after_cost_dollar_weight / asset_price)
 
             # Add to the target portfolio
             target_portfolio[asset] = {"quantity": asset_quantity}

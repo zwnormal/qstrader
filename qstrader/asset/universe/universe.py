@@ -10,6 +10,4 @@ class Universe(object):
 
     @abstractmethod
     def get_assets(self, dt):
-        raise NotImplementedError(
-            "Should implement get_assets()"
-        )
+        raise NotImplementedError("Should implement get_assets()")

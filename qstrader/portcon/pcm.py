@@ -70,16 +70,10 @@ class PortfolioConstructionModel(object):
         `list[str]`
             The sorted full list of Asset symbol strings.
         """
-        broker_portfolio = self.broker.get_portfolio_as_dict(
-            self.broker_portfolio_id
-        )
+        broker_portfolio = self.broker.get_portfolio_as_dict(self.broker_portfolio_id)
         broker_assets = list(broker_portfolio.keys())
         universe_assets = self.universe.get_assets(dt)
-        return sorted(
-            list(
-                set(broker_assets).union(set(universe_assets))
-            )
-        )
+        return sorted(list(set(broker_assets).union(set(universe_assets))))
 
     def _create_zero_target_weight_vector(self, full_assets):
         """
@@ -151,12 +145,7 @@ class PortfolioConstructionModel(object):
         """
         return self.broker.get_portfolio_as_dict(self.broker_portfolio_id)
 
-    def _generate_rebalance_orders(
-        self,
-        dt,
-        target_portfolio,
-        current_portfolio
-    ):
+    def _generate_rebalance_orders(self, dt, target_portfolio, current_portfolio):
         """
         Creates an incremental list of rebalancing Orders from the provided
         target and current portfolios.
@@ -167,7 +156,7 @@ class PortfolioConstructionModel(object):
             The current time used to populate the Order instances.
         target_portfolio : `dict{str: dict}`
             Target asset quantities in integral units.
-        curent_portfolio : `dict{str: dict}`
+        current_portfolio : `dict{str: dict}`
             Current (broker) asset quantities in integral units.
 
         Returns
@@ -277,15 +266,13 @@ class PortfolioConstructionModel(object):
             full_zero_weights, optimised_weights
         )
         if settings.PRINT_EVENTS:
-            print(
-                "(%s) - target weights: %s" % (dt, full_weights)
-            )
+            print("(%s) - target weights: %s" % (dt, full_weights))
 
         # TODO: Improve this with a full statistics logging handler
         if stats is not None:
-            alloc_dict = {'Date': dt}
+            alloc_dict = {"Date": dt}
             alloc_dict.update(full_weights)
-            stats['target_allocations'].append(alloc_dict)
+            stats["target_allocations"].append(alloc_dict)
 
         # Calculate target portfolio in notional
         target_portfolio = self._generate_target_portfolio(dt, full_weights)

@@ -22,15 +22,7 @@ class Transaction(object):
         The trading commission
     """
 
-    def __init__(
-        self,
-        asset,
-        quantity,
-        dt,
-        price,
-        order_id,
-        commission=0.0
-    ):
+    def __init__(self, asset, quantity, dt, price, order_id, commission=0.0):
         self.asset = asset
         self.quantity = quantity
         self.direction = np.copysign(1, self.quantity)
@@ -49,12 +41,14 @@ class Transaction(object):
         `str`
             The string representation of the Transaction.
         """
-        return "%s(asset=%s, quantity=%s, dt=%s, " \
-            "price=%s, order_id=%s)" % (
-                type(self).__name__, self.asset,
-                self.quantity, self.dt,
-                self.price, self.order_id
-            )
+        return "%s(asset=%s, quantity=%s, dt=%s, " "price=%s, order_id=%s)" % (
+            type(self).__name__,
+            self.asset,
+            self.quantity,
+            self.dt,
+            self.price,
+            self.order_id,
+        )
 
     @property
     def cost_without_commission(self):

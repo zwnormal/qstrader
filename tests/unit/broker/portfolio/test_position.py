@@ -13,9 +13,9 @@ def test_basic_long_equities_position():
     are calculated for a simple long equities position.
     """
     # Initial long details
-    asset = 'EQ:MSFT'
+    asset = "EQ:MSFT"
     quantity = 100
-    dt = pd.Timestamp('2020-06-16 15:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 15:00:00", tz=pytz.UTC)
     price = 193.74
     order_id = 123
     commission = 1.0
@@ -27,7 +27,7 @@ def test_basic_long_equities_position():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position = Position.open_from_transaction(transaction)
 
@@ -37,7 +37,7 @@ def test_basic_long_equities_position():
 
     # Update the market price
     new_market_price = 192.80
-    new_dt = pd.Timestamp('2020-06-16 16:00:00', tz=pytz.UTC)
+    new_dt = pd.Timestamp("2020-06-16 16:00:00", tz=pytz.UTC)
     position.update_current_price(new_market_price, new_dt)
 
     assert position.current_price == new_market_price
@@ -68,9 +68,9 @@ def test_position_long_twice():
     with differing quantities and market prices.
     """
     # Initial long details
-    asset = 'EQ:MSFT'
+    asset = "EQ:MSFT"
     quantity = 100
-    dt = pd.Timestamp('2020-06-16 15:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 15:00:00", tz=pytz.UTC)
     price = 193.74
     order_id = 123
     commission = 1.0
@@ -82,7 +82,7 @@ def test_position_long_twice():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position = Position.open_from_transaction(first_transaction)
 
@@ -92,7 +92,7 @@ def test_position_long_twice():
 
     # Second long
     second_quantity = 60
-    second_dt = pd.Timestamp('2020-06-16 16:00:00', tz=pytz.UTC)
+    second_dt = pd.Timestamp("2020-06-16 16:00:00", tz=pytz.UTC)
     second_price = 193.79
     second_order_id = 234
     second_commission = 1.0
@@ -102,7 +102,7 @@ def test_position_long_twice():
         dt=second_dt,
         price=second_price,
         order_id=second_order_id,
-        commission=second_commission
+        commission=second_commission,
     )
     position.transact(second_transaction)
 
@@ -134,9 +134,9 @@ def test_position_long_close():
     subsequent closing trade.
     """
     # Initial long details
-    asset = 'EQ:AMZN'
+    asset = "EQ:AMZN"
     quantity = 100
-    dt = pd.Timestamp('2020-06-16 15:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 15:00:00", tz=pytz.UTC)
     price = 2615.27
     order_id = 123
     commission = 1.0
@@ -148,7 +148,7 @@ def test_position_long_close():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position = Position.open_from_transaction(first_transaction)
 
@@ -158,7 +158,7 @@ def test_position_long_close():
 
     # Closing trade
     second_quantity = -100
-    second_dt = pd.Timestamp('2020-06-16 16:00:00', tz=pytz.UTC)
+    second_dt = pd.Timestamp("2020-06-16 16:00:00", tz=pytz.UTC)
     second_price = 2622.0
     second_order_id = 234
     second_commission = 6.81
@@ -168,7 +168,7 @@ def test_position_long_close():
         dt=second_dt,
         price=second_price,
         order_id=second_order_id,
-        commission=second_commission
+        commission=second_commission,
     )
     position.transact(second_transaction)
 
@@ -201,9 +201,9 @@ def test_position_long_and_short():
     market prices.
     """
     # Initial long details
-    asset = 'EQ:SPY'
+    asset = "EQ:SPY"
     quantity = 100
-    dt = pd.Timestamp('2020-06-16 15:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 15:00:00", tz=pytz.UTC)
     price = 307.05
     order_id = 123
     commission = 1.0
@@ -215,7 +215,7 @@ def test_position_long_and_short():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position = Position.open_from_transaction(first_transaction)
 
@@ -225,7 +225,7 @@ def test_position_long_and_short():
 
     # Short details and transaction
     second_quantity = -60
-    second_dt = pd.Timestamp('2020-06-16 16:00:00', tz=pytz.UTC)
+    second_dt = pd.Timestamp("2020-06-16 16:00:00", tz=pytz.UTC)
     second_price = 314.91
     second_order_id = 234
     second_commission = 1.42
@@ -235,7 +235,7 @@ def test_position_long_and_short():
         dt=second_dt,
         price=second_price,
         order_id=second_order_id,
-        commission=second_commission
+        commission=second_commission,
     )
     position.transact(second_transaction)
 
@@ -269,9 +269,9 @@ def test_position_long_short_long_short_ending_long():
     and market prices.
     """
     # First trade (first long)
-    asset = 'EQ:SPY'
+    asset = "EQ:SPY"
     quantity = 453
-    dt = pd.Timestamp('2020-06-16 15:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 15:00:00", tz=pytz.UTC)
     price = 312.96
     order_id = 100
     commission = 1.95
@@ -283,13 +283,13 @@ def test_position_long_short_long_short_ending_long():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position = Position.open_from_transaction(first_transaction)
 
     # Second trade (first short)
     quantity = -397
-    dt = pd.Timestamp('2020-06-16 16:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 16:00:00", tz=pytz.UTC)
     price = 315.599924
     order_id = 101
     commission = 4.8
@@ -299,13 +299,13 @@ def test_position_long_short_long_short_ending_long():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position.transact(transaction)
 
     # Third trade (second long)
     quantity = 624
-    dt = pd.Timestamp('2020-06-16 17:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 17:00:00", tz=pytz.UTC)
     price = 312.96
     order_id = 102
     commission = 2.68
@@ -315,13 +315,13 @@ def test_position_long_short_long_short_ending_long():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position.transact(transaction)
 
     # Fourth trade (second short), now net long
     quantity = -519
-    dt = pd.Timestamp('2020-06-16 18:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 18:00:00", tz=pytz.UTC)
     price = 315.78
     order_id = 103
     commission = 6.28
@@ -331,7 +331,7 @@ def test_position_long_short_long_short_ending_long():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position.transact(transaction)
 
@@ -363,9 +363,9 @@ def test_basic_short_equities_position():
     are calculated for a simple short equities position.
     """
     # Initial short details
-    asset = 'EQ:TLT'
+    asset = "EQ:TLT"
     quantity = -100
-    dt = pd.Timestamp('2020-06-16 15:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 15:00:00", tz=pytz.UTC)
     price = 162.39
     order_id = 123
     commission = 1.37
@@ -377,7 +377,7 @@ def test_basic_short_equities_position():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position = Position.open_from_transaction(transaction)
 
@@ -387,7 +387,7 @@ def test_basic_short_equities_position():
 
     # Update the market price
     new_market_price = 159.43
-    new_dt = pd.Timestamp('2020-06-16 16:00:00', tz=pytz.UTC)
+    new_dt = pd.Timestamp("2020-06-16 16:00:00", tz=pytz.UTC)
     position.update_current_price(new_market_price, new_dt)
 
     assert position.current_price == new_market_price
@@ -420,9 +420,9 @@ def test_position_short_twice():
     with differing quantities and market prices.
     """
     # Initial short details
-    asset = 'EQ:MSFT'
+    asset = "EQ:MSFT"
     quantity = -100
-    dt = pd.Timestamp('2020-06-16 15:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 15:00:00", tz=pytz.UTC)
     price = 194.55
     order_id = 123
     commission = 1.44
@@ -434,7 +434,7 @@ def test_position_short_twice():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position = Position.open_from_transaction(first_transaction)
 
@@ -444,7 +444,7 @@ def test_position_short_twice():
 
     # Second short
     second_quantity = -60
-    second_dt = pd.Timestamp('2020-06-16 16:00:00', tz=pytz.UTC)
+    second_dt = pd.Timestamp("2020-06-16 16:00:00", tz=pytz.UTC)
     second_price = 194.76
     second_order_id = 234
     second_commission = 1.27
@@ -454,7 +454,7 @@ def test_position_short_twice():
         dt=second_dt,
         price=second_price,
         order_id=second_order_id,
-        commission=second_commission
+        commission=second_commission,
     )
     position.transact(second_transaction)
 
@@ -486,9 +486,9 @@ def test_position_short_close():
     subsequent closing trade.
     """
     # Initial short details
-    asset = 'EQ:TSLA'
+    asset = "EQ:TSLA"
     quantity = -100
-    dt = pd.Timestamp('2020-06-16 15:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 15:00:00", tz=pytz.UTC)
     price = 982.13
     order_id = 123
     commission = 3.18
@@ -500,7 +500,7 @@ def test_position_short_close():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position = Position.open_from_transaction(first_transaction)
 
@@ -510,7 +510,7 @@ def test_position_short_close():
 
     # Closing trade
     second_quantity = 100
-    second_dt = pd.Timestamp('2020-06-16 16:00:00', tz=pytz.UTC)
+    second_dt = pd.Timestamp("2020-06-16 16:00:00", tz=pytz.UTC)
     second_price = 982.13
     second_order_id = 234
     second_commission = 1.0
@@ -520,7 +520,7 @@ def test_position_short_close():
         dt=second_dt,
         price=second_price,
         order_id=second_order_id,
-        commission=second_commission
+        commission=second_commission,
     )
     position.transact(second_transaction)
 
@@ -553,9 +553,9 @@ def test_position_short_and_long():
     market prices.
     """
     # Initial short details
-    asset = 'EQ:TLT'
+    asset = "EQ:TLT"
     quantity = -100
-    dt = pd.Timestamp('2020-06-16 15:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 15:00:00", tz=pytz.UTC)
     price = 162.39
     order_id = 123
     commission = 1.37
@@ -567,7 +567,7 @@ def test_position_short_and_long():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position = Position.open_from_transaction(transaction)
 
@@ -577,7 +577,7 @@ def test_position_short_and_long():
 
     # Long details and transaction
     second_quantity = 60
-    second_dt = pd.Timestamp('2020-06-16 16:00:00', tz=pytz.UTC)
+    second_dt = pd.Timestamp("2020-06-16 16:00:00", tz=pytz.UTC)
     second_price = 159.99
     second_order_id = 234
     second_commission = 1.0
@@ -587,7 +587,7 @@ def test_position_short_and_long():
         dt=second_dt,
         price=second_price,
         order_id=second_order_id,
-        commission=second_commission
+        commission=second_commission,
     )
     position.transact(second_transaction)
 
@@ -621,9 +621,9 @@ def test_position_short_long_short_long_ending_short():
     and market prices.
     """
     # First trade (first short)
-    asset = 'EQ:AGG'
+    asset = "EQ:AGG"
     quantity = -762
-    dt = pd.Timestamp('2020-06-16 15:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 15:00:00", tz=pytz.UTC)
     price = 117.74
     order_id = 100
     commission = 5.35
@@ -633,13 +633,13 @@ def test_position_short_long_short_long_ending_short():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position = Position.open_from_transaction(transaction)
 
     # Second trade (first long)
     quantity = 477
-    dt = pd.Timestamp('2020-06-16 16:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 16:00:00", tz=pytz.UTC)
     price = 117.875597
     order_id = 101
     commission = 2.31
@@ -649,13 +649,13 @@ def test_position_short_long_short_long_ending_short():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position.transact(transaction)
 
     # Third trade (second short)
     quantity = -595
-    dt = pd.Timestamp('2020-06-16 17:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 17:00:00", tz=pytz.UTC)
     price = 117.74
     order_id = 102
     commission = 4.18
@@ -665,13 +665,13 @@ def test_position_short_long_short_long_ending_short():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position.transact(transaction)
 
     # Fourth trade (second long), now net short
     quantity = 427
-    dt = pd.Timestamp('2020-06-16 18:00:00', tz=pytz.UTC)
+    dt = pd.Timestamp("2020-06-16 18:00:00", tz=pytz.UTC)
     price = 117.793115
     order_id = 103
     commission = 2.06
@@ -681,7 +681,7 @@ def test_position_short_long_short_long_ending_short():
         dt=dt,
         price=price,
         order_id=order_id,
-        commission=commission
+        commission=commission,
     )
     position.transact(transaction)
 
@@ -713,29 +713,24 @@ def test_transact_for_incorrect_asset():
     with a Transaction with an Asset that does not
     match the position's asset, raises an Exception.
     """
-    asset1 = 'EQ:AAPL'
-    asset2 = 'EQ:AMZN'
+    asset1 = "EQ:AAPL"
+    asset2 = "EQ:AMZN"
 
     position = Position(
         asset1,
         current_price=950.0,
-        current_dt=pd.Timestamp('2020-06-16 15:00:00', tz=pytz.UTC),
+        current_dt=pd.Timestamp("2020-06-16 15:00:00", tz=pytz.UTC),
         buy_quantity=100,
         sell_quantity=0,
         avg_bought=950.0,
         avg_sold=0.0,
         buy_commission=1.0,
-        sell_commission=0.0
+        sell_commission=0.0,
     )
 
-    new_dt = pd.Timestamp('2020-06-16 16:00:00')
+    new_dt = pd.Timestamp("2020-06-16 16:00:00")
     transaction = Transaction(
-        asset2,
-        quantity=50,
-        dt=new_dt,
-        price=960.0,
-        order_id=123,
-        commission=1.0
+        asset2, quantity=50, dt=new_dt, price=960.0, order_id=123, commission=1.0
     )
 
     with pytest.raises(Exception):

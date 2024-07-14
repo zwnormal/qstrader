@@ -12,6 +12,4 @@ class ExecutionAlgorithm(object):
 
     @abstractmethod
     def __call__(self, dt, initial_orders):
-        raise NotImplementedError(
-            "Should implement __call__()"
-        )
+        raise NotImplementedError("Should implement __call__()")

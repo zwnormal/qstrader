@@ -14,10 +14,7 @@ class FixedWeightPortfolioOptimiser(PortfolioOptimiser):
         TargetWeightGenerators.
     """
 
-    def __init__(
-        self,
-        data_handler=None
-    ):
+    def __init__(self, data_handler=None):
         self.data_handler = data_handler
 
     def __call__(self, dt, initial_weights):

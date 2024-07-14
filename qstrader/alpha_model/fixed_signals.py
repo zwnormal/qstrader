@@ -16,12 +16,7 @@ class FixedSignalsAlphaModel(AlphaModel):
         An optional DataHandler used to preserve interface across AlphaModels.
     """
 
-    def __init__(
-        self,
-        signal_weights,
-        universe=None,
-        data_handler=None
-    ):
+    def __init__(self, signal_weights, universe=None, data_handler=None):
         self.signal_weights = signal_weights
         self.universe = universe
         self.data_handler = data_handler
@@ -35,7 +30,7 @@ class FixedSignalsAlphaModel(AlphaModel):
         ----------
         dt : `pd.Timestamp`
             The time 'now' used to obtain appropriate data and universe
-            for the the signals.
+            for the signals.
 
         Returns
         -------

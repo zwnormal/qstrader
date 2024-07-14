@@ -27,14 +27,7 @@ class Order(object):
         The order ID of the order, if known.
     """
 
-    def __init__(
-        self,
-        dt,
-        asset,
-        quantity,
-        commission=0.0,
-        order_id=None
-    ):
+    def __init__(self, dt, asset, quantity, commission=0.0, order_id=None):
         self.created_dt = dt
         self.cur_dt = dt
         self.asset = asset
@@ -85,9 +78,14 @@ class Order(object):
         """
         return (
             "Order(dt='%s', asset='%s', quantity=%s, "
-            "commission=%s, direction=%s, order_id=%s)" % (
-                self.created_dt, self.asset, self.quantity,
-                self.commission, self.direction, self.order_id
+            "commission=%s, direction=%s, order_id=%s)"
+            % (
+                self.created_dt,
+                self.asset,
+                self.quantity,
+                self.commission,
+                self.direction,
+                self.order_id,
             )
         )
 

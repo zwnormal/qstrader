@@ -45,7 +45,7 @@ class Position(object):
         avg_bought,
         avg_sold,
         buy_commission,
-        sell_commission
+        sell_commission,
     ):
         self.asset = asset
         self.current_price = current_price
@@ -101,7 +101,7 @@ class Position(object):
             avg_bought,
             avg_sold,
             buy_commission,
-            sell_commission
+            sell_commission,
         )
 
     def _check_set_dt(self, dt):
@@ -116,7 +116,7 @@ class Position(object):
             the new current time.
         """
         if dt is not None:
-            if (dt < self.current_dt):
+            if dt < self.current_dt:
                 raise ValueError(
                     'Supplied update time of "%s" is earlier than '
                     'the current time of "%s".' % (dt, self.current_dt)
@@ -165,9 +165,13 @@ class Position(object):
         if self.net_quantity == 0:
             return 0.0
         elif self.net_quantity > 0:
-            return (self.avg_bought * self.buy_quantity + self.buy_commission) / self.buy_quantity
+            return (
+                self.avg_bought * self.buy_quantity + self.buy_commission
+            ) / self.buy_quantity
         else:
-            return (self.avg_sold * self.sell_quantity - self.sell_commission) / self.sell_quantity
+            return (
+                self.avg_sold * self.sell_quantity - self.sell_commission
+            ) / self.sell_quantity
 
     @property
     def net_quantity(self):
@@ -261,18 +265,18 @@ class Position(object):
                 return 0.0
             else:
                 return (
-                    ((self.avg_sold - self.avg_bought) * self.sell_quantity) -
-                    ((self.sell_quantity / self.buy_quantity) * self.buy_commission) -
-                    self.sell_commission
+                    ((self.avg_sold - self.avg_bought) * self.sell_quantity)
+                    - ((self.sell_quantity / self.buy_quantity) * self.buy_commission)
+                    - self.sell_commission
                 )
         elif self.direction == -1:
             if self.buy_quantity == 0:
                 return 0.0
             else:
                 return (
-                    ((self.avg_sold - self.avg_bought) * self.buy_quantity) -
-                    ((self.buy_quantity / self.sell_quantity) * self.sell_commission) -
-                    self.buy_commission
+                    ((self.avg_sold - self.avg_bought) * self.buy_quantity)
+                    - ((self.buy_quantity / self.sell_quantity) * self.sell_commission)
+                    - self.buy_commission
                 )
         else:
             return self.net_incl_commission
@@ -320,7 +324,7 @@ class Position(object):
         if market_price <= 0.0:
             raise ValueError(
                 'Market price "%s" of asset "%s" must be positive to '
-                'update the position.' % (market_price, self.asset)
+                "update the position." % (market_price, self.asset)
             )
         else:
             self.current_price = market_price
@@ -339,7 +343,9 @@ class Position(object):
         commission : `float`
             The commission paid to the broker for the purchase.
         """
-        self.avg_bought = ((self.avg_bought * self.buy_quantity) + (quantity * price)) / (self.buy_quantity + quantity)
+        self.avg_bought = (
+            (self.avg_bought * self.buy_quantity) + (quantity * price)
+        ) / (self.buy_quantity + quantity)
         self.buy_quantity += quantity
         self.buy_commission += commission
 
@@ -357,7 +363,9 @@ class Position(object):
         commission : `float`
             The commission paid to the broker for the sale.
         """
-        self.avg_sold = ((self.avg_sold * self.sell_quantity) + (quantity * price)) / (self.sell_quantity + quantity)
+        self.avg_sold = ((self.avg_sold * self.sell_quantity) + (quantity * price)) / (
+            self.sell_quantity + quantity
+        )
         self.sell_quantity += quantity
         self.sell_commission += commission
 
@@ -373,10 +381,9 @@ class Position(object):
         """
         if self.asset != transaction.asset:
             raise ValueError(
-                'Failed to update Position with asset %s when '
-                'carrying out transaction in asset %s. ' % (
-                    self.asset, transaction.asset
-                )
+                "Failed to update Position with asset %s when "
+                "carrying out transaction in asset %s. "
+                % (self.asset, transaction.asset)
             )
 
         # Nothing to do if the transaction has no quantity
@@ -387,15 +394,11 @@ class Position(object):
         # ensure the correct calculation is called
         if transaction.quantity > 0:
             self._transact_buy(
-                transaction.quantity,
-                transaction.price,
-                transaction.commission
+                transaction.quantity, transaction.price, transaction.commission
             )
         else:
             self._transact_sell(
-                -1.0 * transaction.quantity,
-                transaction.price,
-                transaction.commission
+                -1.0 * transaction.quantity, transaction.price, transaction.commission
             )
 
         # Update the current trade information

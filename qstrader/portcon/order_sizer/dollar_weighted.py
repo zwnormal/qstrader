@@ -28,11 +28,7 @@ class DollarWeightedCashBufferedOrderSizer(OrderSizer):
     """
 
     def __init__(
-        self,
-        broker,
-        broker_portfolio_id,
-        data_handler,
-        cash_buffer_percentage=0.05
+        self, broker, broker_portfolio_id, data_handler, cash_buffer_percentage=0.05
     ):
         self.broker = broker
         self.broker_portfolio_id = broker_portfolio_id
@@ -57,13 +53,11 @@ class DollarWeightedCashBufferedOrderSizer(OrderSizer):
         `float`
             The cash buffer percentage value.
         """
-        if (
-            cash_buffer_percentage < 0.0 or cash_buffer_percentage > 1.0
-        ):
+        if cash_buffer_percentage < 0.0 or cash_buffer_percentage > 1.0:
             raise ValueError(
                 'Cash buffer percentage "%s" provided to dollar-weighted '
-                'execution algorithm is negative or '
-                'exceeds 100%.' % cash_buffer_percentage
+                "execution algorithm is negative or "
+                "exceeds 100%." % cash_buffer_percentage
             )
         else:
             return cash_buffer_percentage
@@ -96,8 +90,8 @@ class DollarWeightedCashBufferedOrderSizer(OrderSizer):
         """
         if any([weight < 0.0 for weight in weights.values()]):
             raise ValueError(
-                'Dollar-weighted cash-buffered order sizing does not support '
-                'negative weights. All positions must be long-only.'
+                "Dollar-weighted cash-buffered order sizing does not support "
+                "negative weights. All positions must be long-only."
             )
 
         weight_sum = sum(weight for weight in weights.values())
@@ -107,10 +101,7 @@ class DollarWeightedCashBufferedOrderSizer(OrderSizer):
         if np.isclose(weight_sum, 0.0):
             return weights
 
-        return {
-            asset: (weight / weight_sum)
-            for asset, weight in weights.items()
-        }
+        return {asset: (weight / weight_sum) for asset, weight in weights.items()}
 
     def __call__(self, dt, weights):
         """
@@ -130,9 +121,7 @@ class DollarWeightedCashBufferedOrderSizer(OrderSizer):
             The cash-buffered target portfolio dictionary with quantities.
         """
         total_equity = self._obtain_broker_portfolio_total_equity()
-        cash_buffered_total_equity = total_equity * (
-            1.0 - self.cash_buffer_percentage
-        )
+        cash_buffered_total_equity = total_equity * (1.0 - self.cash_buffer_percentage)
 
         # Pre-cost dollar weight
         N = len(weights)
@@ -156,22 +145,20 @@ class DollarWeightedCashBufferedOrderSizer(OrderSizer):
 
             # Calculate integral target asset quantity assuming broker costs
             after_cost_dollar_weight = pre_cost_dollar_weight - est_costs
-            asset_price = self.data_handler.get_asset_latest_ask_price(
-                dt, asset
-            )
+            asset_price = self.data_handler.get_asset_latest_ask_price(dt, asset)
 
             if np.isnan(asset_price):
                 raise ValueError(
                     'Asset price for "%s" at timestamp "%s" is Not-a-Number (NaN). '
-                    'This can occur if the chosen backtest start date is earlier '
-                    'than the first available price for a particular asset. Try '
-                    'modifying the backtest start date and re-running.' % (asset, dt)
+                    "This can occur if the chosen backtest start date is earlier "
+                    "than the first available price for a particular asset. Try "
+                    "modifying the backtest start date and re-running." % (asset, dt)
                 )
 
             # TODO: Long only for the time being.
-            asset_quantity = int(
-                np.floor(after_cost_dollar_weight / asset_price)
-            )
+            # We allow fraction of asset for crypto-currency
+            asset_quantity = after_cost_dollar_weight / asset_price
+            # asset_quantity = int(np.floor(after_cost_dollar_weight / asset_price))
 
             # Add to the target portfolio
             target_portfolio[asset] = {"quantity": asset_quantity}

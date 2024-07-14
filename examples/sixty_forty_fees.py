@@ -15,17 +15,17 @@ from qstrader.trading.backtest import BacktestTradingSession
 
 
 if __name__ == "__main__":
-    start_dt = pd.Timestamp('2003-09-30 14:30:00', tz=pytz.UTC)
-    end_dt = pd.Timestamp('2019-12-31 23:59:00', tz=pytz.UTC)
+    start_dt = pd.Timestamp("2003-09-30 14:30:00", tz=pytz.UTC)
+    end_dt = pd.Timestamp("2019-12-31 23:59:00", tz=pytz.UTC)
 
     # Construct the symbols and assets necessary for the backtest
-    strategy_symbols = ['SPY', 'AGG']
-    strategy_assets = ['EQ:%s' % symbol for symbol in strategy_symbols]
+    strategy_symbols = ["SPY", "AGG"]
+    strategy_assets = ["EQ:%s" % symbol for symbol in strategy_symbols]
     strategy_universe = StaticUniverse(strategy_assets)
 
     # To avoid loading all CSV files in the directory, set the
     # data source to load only those provided symbols
-    csv_dir = os.environ.get('QSTRADER_CSV_DATA_DIR', '.')
+    csv_dir = os.environ.get("QSTRADER_CSV_DATA_DIR", ".")
     data_source = CSVDailyBarDataSource(csv_dir, Equity, csv_symbols=strategy_symbols)
     data_handler = BacktestDataHandler(strategy_universe, data_sources=[data_source])
 
@@ -36,17 +36,17 @@ if __name__ == "__main__":
     # static allocations to a universe of assets
     # In this case 60% SPY ETF, 40% AGG ETF,
     # rebalanced at the end of each month
-    strategy_alpha_model = FixedSignalsAlphaModel({'EQ:SPY': 0.6, 'EQ:AGG': 0.4})
+    strategy_alpha_model = FixedSignalsAlphaModel({"EQ:SPY": 0.6, "EQ:AGG": 0.4})
     strategy_backtest = BacktestTradingSession(
         start_dt,
         end_dt,
         strategy_universe,
         strategy_alpha_model,
-        rebalance='end_of_month',
+        rebalance="end_of_month",
         long_only=True,
         cash_buffer_percentage=0.01,
         data_handler=data_handler,
-        fee_model=fee_model
+        fee_model=fee_model,
     )
     strategy_backtest.run()
 
@@ -56,11 +56,11 @@ if __name__ == "__main__":
         end_dt,
         strategy_universe,
         strategy_alpha_model,
-        rebalance='end_of_month',
+        rebalance="end_of_month",
         long_only=True,
         cash_buffer_percentage=0.01,
         data_handler=data_handler,
-        fee_model=ZeroFeeModel()
+        fee_model=ZeroFeeModel(),
     )
     benchmark_backtest.run()
 
@@ -68,6 +68,6 @@ if __name__ == "__main__":
     tearsheet = TearsheetStatistics(
         strategy_equity=strategy_backtest.get_equity_curve(),
         benchmark_equity=benchmark_backtest.get_equity_curve(),
-        title='60/40 US Equities/Bonds (With/Without Fees)'
+        title="60/40 US Equities/Bonds (With/Without Fees)",
     )
     tearsheet.plot_results()

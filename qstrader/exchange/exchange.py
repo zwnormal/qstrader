@@ -15,6 +15,4 @@ class Exchange(object):
 
     @abstractmethod
     def is_open_at_datetime(self, dt):
-        raise NotImplementedError(
-            "Should implement is_open_at_datetime()"
-        )
+        raise NotImplementedError("Should implement is_open_at_datetime()")

@@ -3,7 +3,7 @@ from qstrader.asset.asset import Asset
 
 class Cash(Asset):
     """
-    Stores meta data about a cash asset.
+    Stores metadata about a cash asset.
 
     Parameters
     ----------
@@ -11,9 +11,6 @@ class Cash(Asset):
         The currency of the Cash Asset. Defaults to USD.
     """
 
-    def __init__(
-        self,
-        currency='USD'
-    ):
+    def __init__(self, currency="USD"):
         self.cash_like = True
         self.currency = currency

@@ -46,7 +46,7 @@ class MomentumSignal(Signal):
         `str`
             The lookup key.
         """
-        return '%s_%s' % (asset, lookback + 1)
+        return "%s_%s" % (asset, lookback + 1)
 
     def _cumulative_return(self, asset, lookback):
         """
