@@ -9,13 +9,13 @@ from qstrader.asset.equity import Equity
 from qstrader.asset.universe.static import StaticUniverse
 from qstrader.data.backtest_data_handler import BacktestDataHandler
 from qstrader.data.daily_bar_csv import CSVDailyBarDataSource
+from qstrader.signals.macd import MACDSignal
 from qstrader.statistics.tearsheet import TearsheetStatistics
 from qstrader.trading.backtest import BacktestTradingSession
 from qstrader.signals.signals_collection import SignalsCollection
-from qstrader.signals.cdf import CDFSignal
 
 
-class TopNCPPAlphaModel(AlphaModel):
+class MACDSignalModel(AlphaModel):
     def __init__(self, signals, lookback, top_n, universe, data_handler):
         self.signals = signals
         self.lookback = lookback
@@ -42,20 +42,10 @@ class TopNCPPAlphaModel(AlphaModel):
         weights = {asset: 0.0 for asset in assets}
 
         if self.signals.warmup >= self.lookback:
-            top_assets = self._highest_probability_assets(dt)
-            if len(top_assets) == 1:
-                asset = top_assets[0]
-                weights[asset[0]] = asset[1] if asset[1] >= 0.5 else 0.0
-                weights["EQ:USDC-USD"] = 1 - weights[asset[0]]
-            else:
-                all_probabilities = [asset[1] for asset in top_assets]
-                max_probability = max(all_probabilities)
-                sum_of_probabilities = sum(all_probabilities)
-                for asset in top_assets:
-                    weights[asset[0]] = (
-                        asset[1] / sum_of_probabilities
-                    ) * max_probability
-                weights["EQ:USDC-USD"] = 1 - max_probability
+            assets = self.signals["macd"].assets
+            macd_oscillator_pos = self.signals["macd"](assets[0], self.lookback)
+            weights[assets[0]] = macd_oscillator_pos
+            weights["EQ:USDC-USD"] = 1 - weights[assets[0]]
         return weights
 
 
@@ -80,10 +70,10 @@ if __name__ == "__main__":
         strategy_universe, data_sources=[strategy_data_source]
     )
 
-    cdf = CDFSignal(start_dt, strategy_universe, lookbacks=[lookback])
-    signals = SignalsCollection({"cdf": cdf}, strategy_data_handler)
+    macd = MACDSignal(start_dt, strategy_universe, lookbacks=[lookback])
+    signals = SignalsCollection({"macd": macd}, strategy_data_handler)
 
-    strategy_alpha_model = TopNCPPAlphaModel(
+    strategy_alpha_model = MACDSignalModel(
         signals, lookback, top_n, strategy_universe, strategy_data_handler
     )
 
@@ -93,7 +83,7 @@ if __name__ == "__main__":
         strategy_universe,
         strategy_alpha_model,
         signals=signals,
-        rebalance="daily",
+        rebalance="end_of_month",
         long_only=True,
         cash_buffer_percentage=0.01,
         burn_in_dt=burn_in_dt,

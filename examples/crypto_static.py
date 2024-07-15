@@ -13,11 +13,11 @@ from qstrader.trading.backtest import BacktestTradingSession
 
 
 if __name__ == "__main__":
-    start_dt = pd.Timestamp("2017-09-30 14:30:00", tz=pytz.UTC)
+    start_dt = pd.Timestamp("2023-12-27 14:30:00", tz=pytz.UTC)
     end_dt = pd.Timestamp("2024-07-10 23:59:00", tz=pytz.UTC)
 
     # Construct the symbols and assets necessary for the backtest
-    strategy_symbols = ["SPY", "BTC-USD", "ETH-USD", "SOL-USD", "USDC-USD"]
+    strategy_symbols = ["SPY", "BTC-USD", "ETH-USD", "SOL-USD", "JLP-USD", "USDC-USD"]
     strategy_assets = ["EQ:%s" % symbol for symbol in strategy_symbols]
     strategy_universe = StaticUniverse(strategy_assets)
 
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     # In this case 60% SPY ETF, 40% AGG ETF,
     # rebalanced at the end of each month
     strategy_alpha_model = FixedSignalsAlphaModel(
-        {"EQ:BTC-USD": 0.5, "EQ:USDC-USD": 0.5}
+        {"EQ:JLP-USD": 0.5, "EQ:USDC-USD": 0.5}
     )
     strategy_backtest = BacktestTradingSession(
         start_dt,
