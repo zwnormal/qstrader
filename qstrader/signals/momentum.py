@@ -27,6 +27,7 @@ class MomentumSignal(Signal):
     def __init__(self, start_dt, universe, lookbacks):
         bumped_lookbacks = [lookback + 1 for lookback in lookbacks]
         super().__init__(start_dt, universe, bumped_lookbacks)
+        self.last_momentum = 0
 
     @staticmethod
     def _asset_lookback_key(asset, lookback):
@@ -72,9 +73,15 @@ class MomentumSignal(Signal):
         returns = series.pct_change().dropna().to_numpy()
 
         if len(returns) < 1:
+            self.last_momentum = 0.0
             return 0.0
         else:
-            return (np.cumprod(1.0 + np.array(returns)) - 1.0)[-1]
+            momentum = (np.cumprod(1.0 + np.array(returns)) - 1.0)[-1]
+            momentum_of_momentum = (momentum - self.last_momentum) / abs(
+                self.last_momentum
+            )
+            self.last_momentum = momentum
+            return momentum, momentum_of_momentum
 
     def __call__(self, asset, lookback):
         """

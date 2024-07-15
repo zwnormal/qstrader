@@ -250,6 +250,9 @@ class PortfolioConstructionModel(object):
         else:
             weights = self._create_zero_target_weights_vector(dt)
 
+        if not weights:
+            return []
+
         # If a risk model is present use it to potentially
         # override the alpha model weights
         if self.risk_model:
