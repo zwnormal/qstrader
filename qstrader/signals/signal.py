@@ -65,7 +65,7 @@ class Signal(object):
         universe_assets = self.universe.get_assets(dt)
 
         # TODO: Assume universe never decreases for now
-        extra_assets = list(set(universe_assets) - set((self.assets)))
+        extra_assets = list(set(universe_assets) - set(self.assets))
         for extra_asset in extra_assets:
             self.assets.append(extra_asset)
 

@@ -1,6 +1,6 @@
-import operator
 import os
 
+import joblib
 import pandas as pd
 import pytz
 
@@ -12,30 +12,30 @@ from qstrader.data.daily_bar_csv import CSVDailyBarDataSource
 from qstrader.statistics.tearsheet import TearsheetStatistics
 from qstrader.trading.backtest import BacktestTradingSession
 from qstrader.signals.signals_collection import SignalsCollection
-from qstrader.signals.momentum import MomentumSignal
+from qstrader.signals.gru import GRUSignal
+from tensorflow.keras.models import load_model
 
 
-class MomentumAlphaModel(AlphaModel):
-    def __init__(self, signals, universe, data_handler):
+class GRUAlphaModel(AlphaModel):
+    def __init__(self, signals, universe, data_handler, lookback):
         self.signals = signals
         self.universe = universe
         self.data_handler = data_handler
+        self.lookback = lookback
 
     def __call__(self, dt):
         assets = self.universe.get_assets(dt)
         weights = {asset: 0.0 for asset in assets}
 
-        if self.signals.warmup >= 30:
-            assets = self.signals["momenta"].assets
-            momenta_month, momentum_of_momentum = self.signals["momenta"](assets[0], 30)
+        if self.signals.warmup >= lookback:
+            assets = self.signals["gru"].assets
+            decision = self.signals["gru"]("EQ:SPY", lookback)
 
-            print((momenta_month, momentum_of_momentum))
-
-            if momentum_of_momentum <= -0.06:
-                weights[assets[0]] = 0.0
+            if decision == -1:
+                weights["EQ:SPY"] = 0.0
                 weights["EQ:USDC-USD"] = 1 - weights[assets[0]]
-            elif 0.1 <= momenta_month < 1.0 and 0.1 <= momentum_of_momentum < 1.0:
-                weights[assets[0]] = 0.8
+            elif decision == 1:
+                weights["EQ:SPY"] = 0.8
                 weights["EQ:USDC-USD"] = 1 - weights[assets[0]]
             else:
                 return {}
@@ -43,11 +43,13 @@ class MomentumAlphaModel(AlphaModel):
 
 
 if __name__ == "__main__":
-    start_dt = pd.Timestamp("2017-11-09 14:30:00", tz=pytz.UTC)
-    burn_in_dt = pd.Timestamp("2017-12-09 14:30:00", tz=pytz.UTC)
+    start_dt = pd.Timestamp("2018-10-08 14:30:00", tz=pytz.UTC)
+    burn_in_dt = pd.Timestamp("2019-07-08 14:30:00", tz=pytz.UTC)
     end_dt = pd.Timestamp("2024-07-10 23:59:00", tz=pytz.UTC)
 
-    strategy_symbols = ["ETH-USD", "USDC-USD"]
+    lookback = 365
+
+    strategy_symbols = ["SPY", "USDC-USD"]
     strategy_assets = ["EQ:%s" % symbol for symbol in strategy_symbols]
     strategy_universe = StaticUniverse(strategy_assets)
 
@@ -59,11 +61,22 @@ if __name__ == "__main__":
         strategy_universe, data_sources=[strategy_data_source]
     )
 
-    momenta = MomentumSignal(start_dt, strategy_universe, lookbacks=[30])
-    signals = SignalsCollection({"momenta": momenta}, strategy_data_handler)
+    model_filename = os.path.join(csv_dir, "BTC_GRU_Model.keras")
+    model = load_model(model_filename)
+    encoder_filename = os.path.join(csv_dir, "BTC_GRU_Encoder.pkl")
+    one_hot_encoder = joblib.load(encoder_filename)
 
-    strategy_alpha_model = MomentumAlphaModel(
-        signals, strategy_universe, strategy_data_handler
+    gru = GRUSignal(
+        start_dt,
+        strategy_universe,
+        lookbacks=[lookback],
+        model=model,
+        encoder=one_hot_encoder,
+    )
+    signals = SignalsCollection({"gru": gru}, strategy_data_handler)
+
+    strategy_alpha_model = GRUAlphaModel(
+        signals, strategy_universe, strategy_data_handler, lookback
     )
 
     strategy_backtest = BacktestTradingSession(
@@ -83,6 +96,6 @@ if __name__ == "__main__":
     # Performance Output
     tearsheet = TearsheetStatistics(
         strategy_equity=strategy_backtest.get_equity_curve(),
-        title="Cryptocurrency Momenta TAA",
+        title="Cryptocurrency TAA",
     )
     tearsheet.plot_results()

@@ -24,10 +24,10 @@ class MomentumSignal(Signal):
         The number of lookback periods to store prices for.
     """
 
-    def __init__(self, start_dt, universe, lookbacks):
+    def __init__(self, start_dt, universe, lookbacks, rolling):
         bumped_lookbacks = [lookback + 1 for lookback in lookbacks]
         super().__init__(start_dt, universe, bumped_lookbacks)
-        self.last_momentum = 0
+        self.rolling = rolling
 
     @staticmethod
     def _asset_lookback_key(asset, lookback):
@@ -68,20 +68,12 @@ class MomentumSignal(Signal):
             The cumulative return ('momentum') for the period.
         """
         series = pd.Series(
-            self.buffers.prices[MomentumSignal._asset_lookback_key(asset, lookback)]
+            self.buffers.prices[self._asset_lookback_key(asset, lookback)]
         )
-        returns = series.pct_change().dropna().to_numpy()
 
-        if len(returns) < 1:
-            self.last_momentum = 0.0
-            return 0.0
-        else:
-            momentum = (np.cumprod(1.0 + np.array(returns)) - 1.0)[-1]
-            momentum_of_momentum = (momentum - self.last_momentum) / abs(
-                self.last_momentum
-            )
-            self.last_momentum = momentum
-            return momentum, momentum_of_momentum
+        return series.rolling(window=self.rolling, min_periods=1).apply(
+            lambda x: (np.cumprod(1.0 + x.pct_change()) - 1.0).iloc[-1]
+        )
 
     def __call__(self, asset, lookback):
         """

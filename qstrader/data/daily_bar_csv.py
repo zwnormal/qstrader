@@ -20,7 +20,7 @@ class CSVDailyBarDataSource(object):
     ----------
     csv_dir : `str`
         The full path to the directory where the CSV is located.
-    asset_type : `str`
+    asset_type : `Asset`
         The asset type that the price/volume data is for.
         TODO: Unused at this stage and currently hardcoded to Equity.
     adjust_prices : `Boolean`, optional
