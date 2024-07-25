@@ -32,8 +32,8 @@ class GRUAlphaModel(AlphaModel):
             decision = self.signals["gru"]("EQ:ETH-USD", lookback)
 
             if decision == -1:
-                weights["EQ:ETH-USD"] = -0.5
-                weights["EQ:USDC-USD"] = 1
+                weights["EQ:ETH-USD"] = 0.0
+                weights["EQ:USDC-USD"] = 1.0
             elif decision == 1:
                 weights["EQ:ETH-USD"] = 0.8
                 weights["EQ:USDC-USD"] = 1 - weights[assets[0]]
@@ -86,8 +86,7 @@ if __name__ == "__main__":
         strategy_alpha_model,
         signals=signals,
         rebalance="daily",
-        long_only=False,
-        gross_leverage=1.0,
+        long_only=True,
         cash_buffer_percentage=0.01,
         burn_in_dt=burn_in_dt,
         data_handler=strategy_data_handler,

@@ -72,6 +72,7 @@ class GRUSignal(Signal):
         self.encoder = encoder
         self.last_prediction = ""
         self.last_decision = 0
+        self.continuous_positives = 0
 
     @staticmethod
     def _asset_lookback_key(asset, lookback):
@@ -142,7 +143,13 @@ class GRUSignal(Signal):
             predicted_class = inverse_predictions[i][0]
             predict_results.append((predicted_class, predicted_confidences[i]))
 
+        print((predict_results[0][0], predict_results[0][1]))
         decision = 0
+        if predict_results[0][0] in ["recovery", "markup"]:
+            self.continuous_positives += 1
+        else:
+            self.continuous_positives = 0
+
         if (
             self.last_prediction == "recovery"
             and predict_results[0][0] == "markup"
@@ -150,8 +157,9 @@ class GRUSignal(Signal):
             and self.last_decision != 1
         ):
             decision = 1
+            self.continuous_positives = 0
         elif (
-            predict_results[0][0] in ("distribution", "markdown")
+            predict_results[0][0] in ["distribution"]
             and predict_results[0][1] > 0.70
         ):
             decision = -1
